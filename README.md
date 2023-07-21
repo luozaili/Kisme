@@ -1,4 +1,4 @@
-# Kisme
+# scRNA SoupX and DropletQC
 
 library(dplyr)
 
