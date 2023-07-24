@@ -1,4 +1,4 @@
-# scRNA SoupX and DropletQC
+# using scRNA SoupX and DropletQC to filter the raw datasets 
 
 library(dplyr)
 
