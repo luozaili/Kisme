@@ -149,8 +149,7 @@ pbmc <- FindNeighbors(pbmc, dims = 1:23)
 pbmc <- FindClusters(pbmc, resolution = 0.8)
 
 pbmc <- RunUMAP(pbmc, dims = 1:23)
-# note that you can set `label = TRUE` or use the LabelClusters function to help label
-# individual clusters
+# note that you can set `label = TRUE` or use the LabelClusters function to help label individual clusters
 
 DimPlot(pbmc, reduction = "umap")
 
