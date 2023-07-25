@@ -63,46 +63,27 @@ saveRDS(pbmc, file = ".../file/FBxxxx_SoupX_nf2.rds")
 ## Merge these samples together
 
 library(dplyr)
-
 library(Seurat)
-
 library(patchwork)
-
 library(cowplot)
 
 PCW8 = readRDS("/data/..../FB15_SoupX_nf2.rds")
-
 PCW9 = readRDS("/data/..../FB13_SoupX_nf2.rds")
-
 PCW12 = readRDS("/data/..../FB20195_SoupX_nf2.rds")
-
 PCW13 = readRDS("/data/..../FB20197_SoupX_nf2.rds")
-
 PCW14 = readRDS("/data/..../FB20192_SoupX_nf2.rds")
-
 PCW15 = readRDS("/data/..../FB20191_SoupX_nf2.rds")
-
 PCW16 = readRDS("/data/..../FB20193_SoupX_nf2.rds")
-
 PCW17 = readRDS("/data/..../FB20194_SoupX_nf2.rds")
 
 pbmc = merge(x = PCW8, y = c(PCW9, PCW12, PCW13, PCW14, PCW15, PCW16, PCW17))
-
 pbmc <- NormalizeData(pbmc, normalization.method = "LogNormalize", scale.factor = 10000)
-
 pbmc <- FindVariableFeatures(pbmc, selection.method = "vst", nfeatures = 3000)
-
 all.genes <- rownames(pbmc)
-
 pbmc <- ScaleData(pbmc, features = all.genes)
 
-
 pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
-
-
 ElbowPlot(pbmc)
-
-
 BATCH=c(rep('PCW8',ncol(PCW8)),
         rep('PCW9',ncol(PCW9)),
         rep('PCW12',ncol(PCW12)),
@@ -113,17 +94,12 @@ BATCH=c(rep('PCW8',ncol(PCW8)),
         rep('PCW17',ncol(PCW17)))
 
 pbmc$batch=BATCH
-
-
 pbmc <- FindNeighbors(pbmc, dims = 1:23)
-
 pbmc <- FindClusters(pbmc, resolution = 0.8)
-
 pbmc <- RunUMAP(pbmc, dims = 1:23)
 # note that you can set `label = TRUE` or use the LabelClusters function to help label individual clusters
 
 DimPlot(pbmc, reduction = "umap", raster=FALSE)
-
 new.cluster.ids <- c("GCP-1", "UBC", "GCP-2", "GCP-pro", "Granule_cell-1", "Diff.UBC", "Cycling_GCP-pro", "TCP", "NSC", "Microglia", "Dev.Purkinje", "Meninges", "Microglia", "UBC-pro", "GABA_interneuron", "Granule_cell-2", "NSC", "Brainstem", "Purkinje", "Meninges", "Brainstem", "Endothelial", "Unkown", "UBC", "Monocyte", "Glial.progenitor", "Pericyte", "NSC", "Dev.Purkinje", "Vascular.cell", "Red_blood_cell", "Ependymal", "Oligodendrocytes")
 names(new.cluster.ids) <- levels(pbmc)
 pbmc <- RenameIdents(pbmc, new.cluster.ids)
