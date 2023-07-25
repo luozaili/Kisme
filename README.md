@@ -1,8 +1,11 @@
 # using scRNA SoupX and DropletQC to filter the raw datasets 
 
 library(dplyr)
+
 library(Seurat)
+
 library(patchwork)
+
 library(SoupX)
 
 #remove the ambient RNA form the cells using SoupX for each sample
