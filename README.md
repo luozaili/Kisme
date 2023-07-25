@@ -56,10 +56,11 @@ pbmc<-AddMetaData(pbmc, input2.dc[[1]])
 head(pbmc)
 DimPlot(pbmc, group.by = "cell_status")
 
-Save every these samples one by one "saveRDS(pbmc, file = ".../file/FBxxxx_SoupX_nf2.rds")"
+## Save every these samples one by one "
+saveRDS(pbmc, file = ".../file/FBxxxx_SoupX_nf2.rds")
 
 
-#Merge these samples together
+## Merge these samples together
 
 library(dplyr)
 
@@ -129,5 +130,6 @@ pbmc <- RenameIdents(pbmc, new.cluster.ids)
 pbmc@meta.data$celltype=pbmc@active.ident
 DimPlot(pbmc, reduction = "umap", label = TRUE, raster=FALSE, pt.size = 0.5)
 DimPlot(pbmc, group.by = "cell_status", raster=FALSE)
+## show the cell status of each cell type
 table(pbmc$celltype, pbmc$cell_status)
 saveRDS(pbmc, file = "..../file/fetel_cerebellum_dc_ep.rds")
