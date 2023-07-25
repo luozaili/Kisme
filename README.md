@@ -9,12 +9,17 @@ library(patchwork)
 library(SoupX)
 
 #remove the ambient RNA form the cells using SoupX for each sample
+
 sc= load10X('D:/xxxx_gh38/..../file')
+
 sc = autoEstCont(sc)
+
 out = adjustCounts(sc)
 
 pbmc <- CreateSeuratObject(counts = out, project = "pbmc3k", min.cells = 3, min.features = 200)
+
 pbmc
+
 pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
 VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 plot1 <- FeatureScatter(pbmc, feature1 = "nCount_RNA", feature2 = "percent.mt")
