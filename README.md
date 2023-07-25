@@ -72,23 +72,17 @@ nf2 <- nuclear_fraction_annotation(
 
 saveRDS(nf2, file = "/data/..../FBxxxx_nf2.rds")
 
-
 nf2=readRDS("/data/..../FBxxxx_nf2.rds")
-
 pbmc<-AddMetaData(pbmc, nf2)
-
-
 input=pbmc@meta.data[,c("nuclear_fraction","nCount_RNA")]
-
-output=identify_empty_drops(input)
-
-pbmc<-AddMetaData(pbmc, output)
-
+input2 = identify_empty_drops(nf_umi = input)
+input2$seurat_clusters <- pbmc$seurat_clusters
+input2.dc <- identify_damaged_cells(input2, verbose=FALSE)
+pbmc<-AddMetaData(pbmc, input2.dc[[1]])
+head(pbmc)
 DimPlot(pbmc, group.by = "cell_status")
 
-saveRDS(pbmc, file = "E:/cellranger3.1_gh38/FB20195_SoupX_nf2_200gene.rds")
-
-
+saveRDS(pbmc, file = ".../file/FBxxxx_SoupX_nf2.rds")
 #Merge these samples together
 
 library(dplyr)
@@ -151,8 +145,13 @@ pbmc <- FindClusters(pbmc, resolution = 0.8)
 pbmc <- RunUMAP(pbmc, dims = 1:23)
 # note that you can set `label = TRUE` or use the LabelClusters function to help label individual clusters
 
-DimPlot(pbmc, reduction = "umap")
+DimPlot(pbmc, reduction = "umap", raster=FALSE)
 
-DimPlot(pbmc, group.by = "cell_status")
-
-saveRDS(pbmc, file = "/data/xxxxx/pbmc_SoupX_nf2.rds")
+new.cluster.ids <- c("GCP-1", "UBC", "GCP-2", "GCP-pro", "Granule_cell-1", "Diff.UBC", "Cycling_GCP-pro", "TCP", "NSC", "Microglia", "Dev.Purkinje", "Meninges", "Microglia", "UBC-pro", "GABA_interneuron", "Granule_cell-2", "NSC", "Brainstem", "Purkinje", "Meninges", "Brainstem", "Endothelial", "Unkown", "UBC", "Monocyte", "Glial.progenitor", "Pericyte", "NSC", "Dev.Purkinje", "Vascular.cell", "Red_blood_cell", "Ependymal", "Oligodendrocytes")
+names(new.cluster.ids) <- levels(pbmc)
+pbmc <- RenameIdents(pbmc, new.cluster.ids)
+pbmc@meta.data$celltype=pbmc@active.ident
+DimPlot(pbmc, reduction = "umap", label = TRUE, raster=FALSE, pt.size = 0.5)
+DimPlot(pbmc, group.by = "cell_status", raster=FALSE)
+table(pbmc$celltype, pbmc$cell_status)
+saveRDS(pbmc, file = "..../file/fetel_cerebellum_dc_ep.rds")
