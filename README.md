@@ -8,7 +8,7 @@ library(patchwork)
 
 library(SoupX)
 
-#remove the ambient RNA form the cells using SoupX for each sample
+# remove the ambient RNA form the cells using SoupX for each sample
 
 sc= load10X('D:/xxxx_gh38/..../file')
 
